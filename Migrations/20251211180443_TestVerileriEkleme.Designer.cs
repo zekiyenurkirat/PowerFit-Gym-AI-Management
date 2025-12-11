@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Models;
 
@@ -11,9 +12,11 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(UygulamaContext))]
-    partial class UygulamaContextModelSnapshot : ModelSnapshot
+    [Migration("20251211180443_TestVerileriEkleme")]
+    partial class TestVerileriEkleme
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,46 +156,6 @@ namespace WebApplication1.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Randevu", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AntrenorId")
-                        .HasColumnType("int");
-
-                    b.Property<TimeSpan>("BaslangicSaati")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("BitisSaati")
-                        .HasColumnType("time");
-
-                    b.Property<int>("HizmetId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Onay")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("Tarih")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UyeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AntrenorId");
-
-                    b.HasIndex("HizmetId");
-
-                    b.HasIndex("UyeId");
-
-                    b.ToTable("Randevular");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.SporSalonu", b =>
                 {
                     b.Property<int>("Id")
@@ -233,35 +196,6 @@ namespace WebApplication1.Migrations
                             KapanisSaati = new TimeSpan(0, 22, 0, 0, 0),
                             Telefon = "530 000 00 00"
                         });
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Uye", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Ad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Sifre")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Soyad")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Uyeler");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Antrenor", b =>
@@ -305,45 +239,14 @@ namespace WebApplication1.Migrations
                     b.Navigation("SporSalonu");
                 });
 
-            modelBuilder.Entity("WebApplication1.Models.Randevu", b =>
-                {
-                    b.HasOne("WebApplication1.Models.Antrenor", "Antrenor")
-                        .WithMany("Randevular")
-                        .HasForeignKey("AntrenorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.Models.Hizmet", "Hizmet")
-                        .WithMany("Randevular")
-                        .HasForeignKey("HizmetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication1.Models.Uye", "Uye")
-                        .WithMany("Randevular")
-                        .HasForeignKey("UyeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Antrenor");
-
-                    b.Navigation("Hizmet");
-
-                    b.Navigation("Uye");
-                });
-
             modelBuilder.Entity("WebApplication1.Models.Antrenor", b =>
                 {
                     b.Navigation("AntrenorHizmetler");
-
-                    b.Navigation("Randevular");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Hizmet", b =>
                 {
                     b.Navigation("AntrenorHizmetler");
-
-                    b.Navigation("Randevular");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.SporSalonu", b =>
@@ -351,11 +254,6 @@ namespace WebApplication1.Migrations
                     b.Navigation("Antrenorler");
 
                     b.Navigation("Hizmetler");
-                });
-
-            modelBuilder.Entity("WebApplication1.Models.Uye", b =>
-                {
-                    b.Navigation("Randevular");
                 });
 #pragma warning restore 612, 618
         }

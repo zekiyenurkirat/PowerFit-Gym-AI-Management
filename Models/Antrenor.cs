@@ -18,6 +18,8 @@
 
         // Antrenörün verebildiği hizmet türleri (Yoga, Fitness, Pilates)
         public ICollection<AntrenorHizmet> AntrenorHizmetler { get; set; }
+        public ICollection<Randevu> Randevular { get; set; }
+
     }
 
 }

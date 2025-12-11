@@ -11,6 +11,10 @@ namespace WebApplication1.Models
         public DbSet<Hizmet> Hizmetler { get; set; }
         public DbSet<Antrenor> Antrenorler { get; set; }
         public DbSet<AntrenorHizmet> AntrenorHizmetler { get; set; }
+        public DbSet<Uye> Uyeler { get; set; }
+        public DbSet<Randevu> Randevular { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +50,95 @@ namespace WebApplication1.Models
                 .WithMany(h => h.AntrenorHizmetler)
                 .HasForeignKey(ah => ah.HizmetId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Randevu>()
+                .HasOne(r => r.Uye)
+                .WithMany(u => u.Randevular)
+                .HasForeignKey(r => r.UyeId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Randevu>()
+                .HasOne(r => r.Antrenor)
+                .WithMany(a => a.Randevular)
+                .HasForeignKey(r => r.AntrenorId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Randevu>()
+                .HasOne(r => r.Hizmet)
+                .WithMany(h => h.Randevular)
+                .HasForeignKey(r => r.HizmetId)
+                .OnDelete(DeleteBehavior.Restrict);
+                
+
+            // veriler
+            modelBuilder.Entity<SporSalonu>().HasData(
+                new SporSalonu
+                {
+                    Id = 1,
+                    Ad = "Fitlife Spor Salonu",
+                    Adres = "İstanbul /Kadıköy",
+                    Telefon ="530 000 00 00",
+                    AcilisSaati = new TimeSpan(7,0,0),
+                    KapanisSaati = new TimeSpan(22,0,0),
+                    
+
+                }
+
+            );
+
+            modelBuilder.Entity<Hizmet>().HasData(
+                new Hizmet
+                {
+                    Id = 1,
+                    Ad = "Fitness",
+                    SureDakika = 60,
+                    Ucret = 200,
+                    SporSalonuId = 1,
+
+                },
+                new Hizmet
+                {
+                    Id = 2,
+                    Ad = "Yoga",
+                    SureDakika = 45,
+                    Ucret = 180,
+                    SporSalonuId = 1,
+
+                }
+
+            );
+
+            modelBuilder.Entity<Antrenor>().HasData(
+                new Antrenor
+                {
+                    Id = 1,
+                    Ad = "Ahmet",
+                    Soyad = "Yılmaz",
+                    UzmanlikAlani = "Fitness",
+                    BaslangicSaati = new TimeSpan(9, 0, 0),
+                    BitisSaati = new TimeSpan(17, 0, 0),
+                    SporSalonuId = 1,
+                },
+                new Antrenor
+                {
+                    Id = 2,
+                    Ad = "Elif",
+                    Soyad = "Demir",
+                    UzmanlikAlani = "Yoga",
+                    BaslangicSaati = new TimeSpan(9, 0, 0),
+                    BitisSaati = new TimeSpan(17, 0, 0),
+                    SporSalonuId = 1,
+                }
+            );
+
+            modelBuilder.Entity<AntrenorHizmet>().HasData(
+                new AntrenorHizmet { AntrenorId = 1, HizmetId = 1 },
+                new AntrenorHizmet { AntrenorId = 2, HizmetId = 2 }
+            );
+
+
+
+
+
+
 
 
         }

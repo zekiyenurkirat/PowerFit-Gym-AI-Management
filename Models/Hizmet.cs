@@ -11,6 +11,8 @@
         public int SporSalonuId { get; set; }
         public SporSalonu SporSalonu { get; set; } // sporsalonu türünden sporsalonu değilkeni aldık yani buaradan çalıştığı sporsalonu adını alıcaz galiba
         public ICollection<AntrenorHizmet> AntrenorHizmetler { get; set; }
+        public ICollection<Randevu> Randevular { get; set; }
+
 
 
     }
