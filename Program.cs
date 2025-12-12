@@ -1,19 +1,33 @@
-using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<UygulamaContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
 // Add services to the container.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddDbContext<UygulamaContext>(options =>
+    options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+    .AddRoles<IdentityRole>()       // ROL EKLEME
+    .AddEntityFrameworkStores<UygulamaContext>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseMigrationsEndPoint();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -22,8 +36,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseStaticFiles();
 
 app.UseAuthorization();
+app.UseAuthentication();
 
 app.MapStaticAssets();
 
@@ -32,5 +48,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages()
+   .WithStaticAssets();
 
 app.Run();
