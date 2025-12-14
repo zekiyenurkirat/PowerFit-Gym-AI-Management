@@ -1,54 +1,98 @@
-using WebApplication1.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using WebApplication1.Services;
+
 using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Data;
+using WebApplication1.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string not found.");
+
 builder.Services.AddDbContext<UygulamaContext>(options =>
     options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+// ?? Identity + Roller
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<UygulamaContext>()
+    .AddDefaultTokenProviders();
+// buraya üyeler eriþemez sayfasý geldi
+
+builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
-})
-    .AddRoles<IdentityRole>()       // ROL EKLEME
-    .AddEntityFrameworkStores<UygulamaContext>();
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+    options.LoginPath = "/Identity/Account/Login";
+});
+
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages(); // Identity UI için
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseMigrationsEndPoint();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-app.UseRouting();
 app.UseStaticFiles();
+app.UseRouting();
 
-app.UseAuthorization();
 app.UseAuthentication();
-
-app.MapStaticAssets();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages(); // Identity sayfalarý
+
+// eklediðim yer
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+    string[] roles = { "Admin", "Uye" };
+
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
+    }
+
+    // Ýlk admin
+    var adminEmail = "admin@spor.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+    if (adminUser == null)
+    {
+        var user = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(user, "Admin123!");
+
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(user, "Admin");
+        }
+    }
+}
+
 
 app.Run();

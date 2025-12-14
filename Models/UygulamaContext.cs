@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Models
 {
-    public class UygulamaContext : DbContext
+    public class UygulamaContext : IdentityDbContext
     {
         public UygulamaContext(DbContextOptions<UygulamaContext> options) : base(options)
         { 
