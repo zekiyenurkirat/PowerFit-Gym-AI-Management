@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using WebApplication1.Services;
 
+
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,12 @@ builder.Services.AddDbContext<UygulamaContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<UygulamaContext>()
     .AddDefaultTokenProviders();
+
+
+
+
+
+
 // buraya üyeler eriþemez sayfasý geldi
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -62,36 +69,38 @@ using (var scope = app.Services.CreateScope())
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
 
-    string[] roles = { "Admin", "Uye" };
-
-    foreach (var role in roles)
+    Task.Run(async () =>
     {
-        if (!await roleManager.RoleExistsAsync(role))
+        string[] roles = { "Admin", "Uye" };
+
+        foreach (var role in roles)
         {
-            await roleManager.CreateAsync(new IdentityRole(role));
+            if (!await roleManager.RoleExistsAsync(role))
+            {
+                await roleManager.CreateAsync(new IdentityRole(role));
+            }
         }
-    }
 
-    // Ýlk admin
-    var adminEmail = "admin@spor.com";
-    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+        var adminEmail = "admin@spor.com";
+        var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
-    if (adminUser == null)
-    {
-        var user = new IdentityUser
+        if (adminUser == null)
         {
-            UserName = adminEmail,
-            Email = adminEmail,
-            EmailConfirmed = true
-        };
+            var user = new IdentityUser
+            {
+                UserName = adminEmail,
+                Email = adminEmail,
+                EmailConfirmed = true
+            };
 
-        var result = await userManager.CreateAsync(user, "Admin123!");
+            var result = await userManager.CreateAsync(user, "Admin123!");
 
-        if (result.Succeeded)
-        {
-            await userManager.AddToRoleAsync(user, "Admin");
+            if (result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, "Admin");
+            }
         }
-    }
+    }).Wait();
 }
 
 

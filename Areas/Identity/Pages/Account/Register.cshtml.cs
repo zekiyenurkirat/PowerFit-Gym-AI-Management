@@ -76,6 +76,15 @@ namespace WebApplication1.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+
+            [Required]
+            [Display(Name = "Ad")]
+            public string Ad { get; set; }
+
+            [Required]
+            [Display(Name = "Soyad")]
+            public string Soyad { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -130,6 +139,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                     var uye = new Uye
                     {
                         Ad = Input.Email,
+                        Soyad = Input.Soyad,
                         Email = Input.Email,
                         IdentityUserId = user.Id
                     };

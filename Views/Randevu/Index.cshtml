@@ -1,0 +1,27 @@
+﻿@model IEnumerable<WebApplication1.Models.Randevu>
+
+
+<h2>Randevular</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Üye</th>
+            <th>Antrenör</th>
+            <th>Hizmet</th>
+            <th>Tarih</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Uye?.Ad @item.Uye?.Soyad</td>
+                <td>@item.Antrenor?.Ad</td>
+                <td>@item.Hizmet?.Ad</td>
+                <td>@item.TarihSaat</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

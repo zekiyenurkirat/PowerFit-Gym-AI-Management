@@ -362,19 +362,13 @@ namespace WebApplication1.Migrations
                     b.Property<int>("AntrenorId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("BaslangicSaati")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("BitisSaati")
-                        .HasColumnType("time");
-
                     b.Property<int>("HizmetId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Onay")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Tarih")
+                    b.Property<DateTime>("TarihSaat")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UyeId")

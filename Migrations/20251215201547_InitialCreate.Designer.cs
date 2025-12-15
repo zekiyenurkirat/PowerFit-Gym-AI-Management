@@ -12,8 +12,8 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(UygulamaContext))]
-    [Migration("20251214082228_IdentityEklendi1")]
-    partial class IdentityEklendi1
+    [Migration("20251215201547_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -365,19 +365,13 @@ namespace WebApplication1.Migrations
                     b.Property<int>("AntrenorId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("BaslangicSaati")
-                        .HasColumnType("time");
-
-                    b.Property<TimeSpan>("BitisSaati")
-                        .HasColumnType("time");
-
                     b.Property<int>("HizmetId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Onay")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("Tarih")
+                    b.Property<DateTime>("TarihSaat")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("UyeId")
@@ -445,19 +439,17 @@ namespace WebApplication1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Ad")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sifre")
+                    b.Property<string>("IdentityUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Soyad")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
