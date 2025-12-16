@@ -12,7 +12,7 @@ using WebApplication1.Models;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(UygulamaContext))]
-    [Migration("20251215201547_InitialCreate")]
+    [Migration("20251215210541_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

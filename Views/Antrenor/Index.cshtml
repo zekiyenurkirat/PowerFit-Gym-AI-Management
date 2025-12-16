@@ -1,0 +1,40 @@
+﻿@model IEnumerable<WebApplication1.Models.Antrenor>
+
+@{
+    ViewData["Title"] = "Antrenör Listesi";
+}
+
+<h1>Antrenör Listesi</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Yeni Antrenör Ekle</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Uzmanlık Alanı</th>
+            <th>Başlangıç Saati</th>
+            <th>Bitiş Saati</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Ad</td>
+                <td>@item.Soyad</td>
+                <td>@item.UzmanlikAlani</td>
+                <td>@item.BaslangicSaati</td>
+                <td>@item.BitisSaati</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

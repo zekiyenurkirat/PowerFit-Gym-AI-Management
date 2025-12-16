@@ -1,0 +1,54 @@
+﻿@model WebApplication1.Models.Antrenor
+
+<h2>Antrenör Ekle</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+
+    <div>
+        <label>Ad</label>
+        <input asp-for="Ad" class="form-control" />
+        <span asp-validation-for="Ad" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Soyad</label>
+        <input asp-for="Soyad" class="form-control" />
+        <span asp-validation-for="Soyad" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Uzmanlık Alanı</label>
+        <input asp-for="UzmanlikAlani" class="form-control" />
+        <span asp-validation-for="UzmanlikAlani" class="text-danger"></span>
+    </div>
+
+    <div>
+        <label>Başlangıç Saati</label>
+        <input asp-for="BaslangicSaati" type="time" class="form-control" />
+    </div>
+
+    <div>
+        <label>Bitiş Saati</label>
+        <input asp-for="BitisSaati" type="time" class="form-control" />
+    </div>
+
+    <div>
+        <label>Spor Salonu</label>
+        <select asp-for="SporSalonuId"
+                asp-items="@(new SelectList(ViewBag.SporSalonlari, "Id", "Ad"))"
+                class="form-control">
+            <option value="">Seçiniz</option>
+        </select>
+
+        <span asp-validation-for="SporSalonuId" class="text-danger"></span>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

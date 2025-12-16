@@ -1,0 +1,32 @@
+﻿@model WebApplication1.Models.Hizmet
+
+<h2>Hizmet Ekle</h2>
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Create" method="post">
+    <div>
+        <label>Ad</label>
+        <input asp-for="Ad" class="form-control" />
+    </div>
+
+    <div>
+        <label>Süre (dk)</label>
+        <input asp-for="SureDakika" class="form-control" />
+    </div>
+
+    <div>
+        <label>Ücret</label>
+        <input asp-for="Ucret" class="form-control" />
+    </div>
+
+    <div>
+        <label>Spor Salonu</label>
+        <select asp-for="SporSalonuId"
+                asp-items="@(new SelectList(ViewBag.SporSalonlari, "Id", "Ad"))"
+                class="form-control">
+            <option value="">Seçiniz</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

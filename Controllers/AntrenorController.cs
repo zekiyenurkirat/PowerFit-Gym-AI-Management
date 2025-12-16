@@ -4,18 +4,18 @@ using WebApplication1.Data;
 using WebApplication1.Models;
 
 [Authorize(Roles = "Admin")]
-public class HizmetController : Controller
+public class AntrenorController : Controller
 {
     private readonly UygulamaContext _context;
 
-    public HizmetController(UygulamaContext context)
+    public AntrenorController(UygulamaContext context)
     {
         _context = context;
     }
 
     public IActionResult Index()
     {
-        return View(_context.Hizmetler.ToList());
+        return View(_context.Antrenorler.ToList());
     }
 
     public IActionResult Create()
@@ -26,7 +26,7 @@ public class HizmetController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult Create(Hizmet hizmet)
+    public IActionResult Create(Antrenor antrenor)
     {
         ModelState.Remove("SporSalonu"); //sorun
         ModelState.Remove("AntrenorHizmetler");
@@ -34,11 +34,12 @@ public class HizmetController : Controller
         if (!ModelState.IsValid)
         {
             ViewBag.SporSalonlari = _context.SporSalonları.ToList();
-            return View(hizmet);
+            return View(antrenor);
         }
 
-        _context.Hizmetler.Add(hizmet);
-        _context.SaveChanges();
+        _context.Antrenorler.Add(antrenor);
+        _context.SaveChanges(); // bunla ekliyoruz derste öğrendin database
         return RedirectToAction(nameof(Index));
     }
 }
+

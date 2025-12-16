@@ -14,7 +14,7 @@
         // BAĞLANTI (Many-to-One)
         // Bir salonda çok antrenör vardır ama bir antrenör sadece bir salona bağlıdır
         public int SporSalonuId { get; set; }
-        public SporSalonu SporSalonu { get; set; }
+        public SporSalonu? SporSalonu { get; set; }
 
         // Antrenörün verebildiği hizmet türleri (Yoga, Fitness, Pilates)
         public ICollection<AntrenorHizmet> AntrenorHizmetler { get; set; }

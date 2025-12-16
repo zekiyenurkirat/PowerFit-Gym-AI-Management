@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
@@ -48,33 +49,33 @@ public class RandevuController : Controller
 
     // 🔴 CREATE (POST) → KAYDET
     [HttpPost]
-    [Authorize]
+    //[Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Randevu randevu)
     {
-        var user = await _userManager.GetUserAsync(User);
-        if (user == null)
-            return Unauthorized();
+        // 1️⃣ Giriş yapan kullanıcı
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        // 🔵 ÜYEYİ BUL
         var uye = await _context.Uyeler
-            .FirstOrDefaultAsync(u => u.IdentityUserId == user.Id);
+            .FirstOrDefaultAsync(u => u.IdentityUserId == userId);
 
-        // 🔵 YOKSA OTOMATİK OLUŞTUR
         if (uye == null)
         {
-            uye = new Uye
-            {
-                Email = user.Email,
-                Ad = user.Email,
-                IdentityUserId = user.Id
-            };
-
-            _context.Uyeler.Add(uye);
-            await _context.SaveChangesAsync();
+            return Unauthorized();
         }
 
-        // 🔴 ÇAKIŞMA KONTROLÜ (ÖNCE!)
+        // 2️⃣ UyeId otomatik ata
+        randevu.UyeId = uye.Id;
+
+        // 3️⃣ VALIDATION
+        if (!ModelState.IsValid)
+        {
+            ViewBag.Antrenorler = _context.Antrenorler.ToList();
+            ViewBag.Hizmetler = _context.Hizmetler.ToList();
+            return View(randevu);
+        }
+
+        // 4️⃣ ÇAKIŞMA KONTROLÜ (KAYDETMEDEN ÖNCE!)
         bool cakismaVarMi = await _context.Randevular.AnyAsync(r =>
             r.AntrenorId == randevu.AntrenorId &&
             r.TarihSaat == randevu.TarihSaat
@@ -88,30 +89,11 @@ public class RandevuController : Controller
             return View(randevu);
         }
 
-        // 🔵 KAYDET
-        randevu.UyeId = uye.Id;
-
+        // 5️⃣ KAYDET (SADECE 1 KERE)
         _context.Randevular.Add(randevu);
         await _context.SaveChangesAsync();
 
-        // buraya ekledinnnn
-        if (!ModelState.IsValid)
-        {
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine(error.ErrorMessage);
-            }
-
-            ViewBag.Antrenorler = _context.Antrenorler.ToList();
-            ViewBag.Hizmetler = _context.Hizmetler.ToList();
-            return View(randevu);
-        }
-
         return RedirectToAction(nameof(Index));
-
-
-
-
     }
 
 
