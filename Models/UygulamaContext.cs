@@ -56,17 +56,17 @@ namespace WebApplication1.Models
                 .HasOne(r => r.Uye)
                 .WithMany(u => u.Randevular)
                 .HasForeignKey(r => r.UyeId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Randevu>()
                 .HasOne(r => r.Antrenor)
                 .WithMany(a => a.Randevular)
                 .HasForeignKey(r => r.AntrenorId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Randevu>()
                 .HasOne(r => r.Hizmet)
                 .WithMany(h => h.Randevular)
                 .HasForeignKey(r => r.HizmetId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
                 
 
             // veriler

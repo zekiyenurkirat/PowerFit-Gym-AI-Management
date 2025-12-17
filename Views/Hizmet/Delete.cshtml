@@ -1,0 +1,45 @@
+﻿@model WebApplication1.Models.Hizmet
+
+@{
+    ViewData["Title"] = "Hizmet Sil";
+}
+
+<h1>Hizmet Sil</h1>
+
+<h3>Bu hizmeti silmek istediğinize emin misiniz?</h3>
+<div class="alert alert-warning">
+    <strong>Uyarı:</strong> Bu hizmeti sildiğinizde, bu hizmete ait tüm randevular da silinecektir.
+</div>
+
+<div>
+    <h4>Hizmet Bilgileri</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Hizmet Adı
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Ad
+        </dd>
+
+        <dt class="col-sm-2">
+            Süre (Dk)
+        </dt>
+        <dd class="col-sm-10">
+            @Model.SureDakika
+        </dd>
+
+        <dt class="col-sm-2">
+            Ücret
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Ucret TL
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Evet, Sil" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary">Listeye Geri Dön</a>
+    </form>
+</div>
