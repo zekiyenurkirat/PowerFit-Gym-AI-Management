@@ -6,7 +6,7 @@ using System.Security.Claims;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-[Authorize]
+[Authorize] // Sadece giriş yapmış kullanıcılar erişebilir
 public class RandevuController : Controller
 {
     private readonly UygulamaContext _context;
@@ -18,6 +18,7 @@ public class RandevuController : Controller
         _userManager = userManager;
     }
 
+    // 📄 LİSTELEME
     public async Task<IActionResult> Index()
     {
         IQueryable<Randevu> randevular = _context.Randevular
@@ -25,49 +26,55 @@ public class RandevuController : Controller
             .Include(r => r.Antrenor)
             .Include(r => r.Hizmet);
 
-        // 👑 Admin her şeyi görür
+        // Eğer Admin DEĞİLSE, sadece kendi randevularını görsün
         if (!User.IsInRole("Admin"))
         {
             var userId = _userManager.GetUserId(User);
-
-            randevular = randevular
-                .Where(r => r.Uye.IdentityUserId == userId);
+            randevular = randevular.Where(r => r.Uye.IdentityUserId == userId);
         }
 
         return View(await randevular.ToListAsync());
     }
 
-
-    [Authorize]
+    // ➕ EKLEME SAYFASI (GET)
     public IActionResult Create()
     {
         ViewBag.Antrenorler = _context.Antrenorler.ToList();
         ViewBag.Hizmetler = _context.Hizmetler.ToList();
-        return View(); //antrenör ve hizmet bilgisi getirme lagin yapanlar için antrenör ve hizmet bilgisini getirir
+        return View();
     }
 
-
-    // 🔴 CREATE (POST) → KAYDET
+    // 💾 KAYDETME İŞLEMİ (POST)
     [HttpPost]
-    //[Authorize]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Randevu randevu)
     {
-        // 1️⃣ Giriş yapan kullanıcı
+        // 1. Giriş yapan kullanıcının ID'sini bul
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-        var uye = await _context.Uyeler
-            .FirstOrDefaultAsync(u => u.IdentityUserId == userId);
+        // 2. Bu kullanıcının 'Uyeler' tablosundaki kaydını bul
+        var uye = await _context.Uyeler.FirstOrDefaultAsync(u => u.IdentityUserId == userId);
 
         if (uye == null)
         {
-            return Unauthorized();
+            // EĞER BURAYA DÜŞÜYORSAN: Register işleminde 'Uyeler' tablosuna kayıt eklememişiz demektir.
+            ModelState.AddModelError("", "Hata: Kullanıcı profili bulunamadı. Lütfen yöneticinizle görüşün.");
+
+            // Listeleri tekrar doldurup sayfayı geri döndür
+            ViewBag.Antrenorler = _context.Antrenorler.ToList();
+            ViewBag.Hizmetler = _context.Hizmetler.ToList();
+            return View(randevu);
         }
 
-        // 2️⃣ UyeId otomatik ata
+        // 3. Randevuyu bu üyeye ata
         randevu.UyeId = uye.Id;
 
-        // 3️⃣ VALIDATION
+        // Model validasyonu (Gelen veriler kurallara uyuyor mu?)
+        // Not: Navigasyon propertyleri (Uye, Antrenor vb.) null gelebilir, bu yüzden ModelState.Remove yapıyoruz.
+        ModelState.Remove("Uye");
+        ModelState.Remove("Antrenor");
+        ModelState.Remove("Hizmet");
+
         if (!ModelState.IsValid)
         {
             ViewBag.Antrenorler = _context.Antrenorler.ToList();
@@ -75,7 +82,7 @@ public class RandevuController : Controller
             return View(randevu);
         }
 
-        // 4️⃣ ÇAKIŞMA KONTROLÜ (KAYDETMEDEN ÖNCE!)
+        // 4. ÇAKIŞMA KONTROLÜ (Aynı antrenöre aynı saatte randevu var mı?)
         bool cakismaVarMi = await _context.Randevular.AnyAsync(r =>
             r.AntrenorId == randevu.AntrenorId &&
             r.TarihSaat == randevu.TarihSaat
@@ -83,13 +90,13 @@ public class RandevuController : Controller
 
         if (cakismaVarMi)
         {
-            ModelState.AddModelError("", "Bu antrenör bu saatte dolu.");
+            ModelState.AddModelError("", "Seçtiğiniz antrenör bu saatte maalesef dolu.");
             ViewBag.Antrenorler = _context.Antrenorler.ToList();
             ViewBag.Hizmetler = _context.Hizmetler.ToList();
             return View(randevu);
         }
 
-        // 5️⃣ KAYDET (SADECE 1 KERE)
+        // 5. Kaydet
         _context.Randevular.Add(randevu);
         await _context.SaveChangesAsync();
 
@@ -97,8 +104,28 @@ public class RandevuController : Controller
     }
 
 
+    // RandevuController.cs içine eklenecek:
 
+    // 🟢 Sadece Adminler Onaylayabilir
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Onayla(int id)
+    {
+        // Onaylanacak randevuyu bul
+        var randevu = await _context.Randevular.FindAsync(id);
 
+        if (randevu == null)
+        {
+            return NotFound();
+        }
 
+        // Durumu 'True' yap (Onaylandı)
+        randevu.Onay = true;
+
+        // Veritabanına kaydet
+        await _context.SaveChangesAsync();
+
+        // Listeye geri dön
+        return RedirectToAction(nameof(Index));
+    }
 
 }

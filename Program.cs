@@ -16,9 +16,19 @@ builder.Services.AddDbContext<UygulamaContext>(options =>
     options.UseSqlServer(connectionString));
 
 // ?? Identity + Roller
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<UygulamaContext>()
-    .AddDefaultTokenProviders();
+// Program.cs içinde bu kýsmý bul ve böyle güncelle:
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    // Þifre kurallarýný "sau" yazabilmek için esnetiyoruz
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 3; // En az 3 karakter olsun (sau)
+    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+})
+.AddEntityFrameworkStores<UygulamaContext>()
+.AddDefaultTokenProviders();
 
 
 
@@ -81,7 +91,7 @@ using (var scope = app.Services.CreateScope())
             }
         }
 
-        var adminEmail = "admin@spor.com";
+        var adminEmail = "b231210388@sakarya.edu.tr";
         var adminUser = await userManager.FindByEmailAsync(adminEmail);
 
         if (adminUser == null)
@@ -93,7 +103,7 @@ using (var scope = app.Services.CreateScope())
                 EmailConfirmed = true
             };
 
-            var result = await userManager.CreateAsync(user, "Admin123!");
+            var result = await userManager.CreateAsync(user, "sau");
 
             if (result.Succeeded)
             {

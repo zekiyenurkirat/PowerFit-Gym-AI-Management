@@ -1,0 +1,40 @@
+﻿@model WebApplication1.Models.Hizmet
+
+@{
+    ViewData["Title"] = "Hizmet Düzenle";
+}
+
+<h2>Hizmet Düzenle</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Ad" class="control-label">Hizmet Adı</label>
+                <input asp-for="Ad" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="SureDakika" class="control-label">Süre (Dakika)</label>
+                <input asp-for="SureDakika" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Ucret" class="control-label">Ücret</label>
+                <input asp-for="Ucret" class="form-control" />
+            </div>
+
+            <div class="form-group mb-3">
+                <label class="control-label">Spor Salonu</label>
+                <select asp-for="SporSalonuId" class="form-control" asp-items="@(new SelectList(ViewBag.SporSalonlari, "Id", "Ad"))"></select>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Güncelle" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -138,7 +138,7 @@ namespace WebApplication1.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password.");
                     var uye = new Uye
                     {
-                        Ad = Input.Email,
+                        Ad = Input.Ad,
                         Soyad = Input.Soyad,
                         Email = Input.Email,
                         IdentityUserId = user.Id

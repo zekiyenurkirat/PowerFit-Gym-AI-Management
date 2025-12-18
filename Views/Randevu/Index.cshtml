@@ -1,27 +1,76 @@
 ﻿@model IEnumerable<WebApplication1.Models.Randevu>
 
+@{
+    ViewData["Title"] = "Randevular";
+}
 
 <h2>Randevular</h2>
 
-<table class="table">
+@if (User.IsInRole("Admin"))
+{
+    <div class="alert alert-info">
+        Yönetici Paneli: Bekleyen randevuları buradan onaylayabilirsiniz.
+    </div>
+}
+
+<table class="table table-hover">
     <thead>
         <tr>
             <th>Üye</th>
             <th>Antrenör</th>
             <th>Hizmet</th>
             <th>Tarih</th>
+            <th>Durum</th> @* 🆕 Yeni Kolon *@
+            @if (User.IsInRole("Admin"))
+            {
+                <th>İşlemler</th> @* 🆕 Sadece Admin Görsün *@
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Uye?.Ad @item.Uye?.Soyad</td>
+                <td>
+                    @item.Uye?.Ad @item.Uye?.Soyad
+                    <br />
+                    <small class="text-muted">@item.Uye?.Email</small>
+                </td>
                 <td>@item.Antrenor?.Ad</td>
                 <td>@item.Hizmet?.Ad</td>
-                <td>@item.TarihSaat</td>
+                <td>@item.TarihSaat.ToString("dd.MM.yyyy HH:mm")</td>
+
+                @* 🟢 DURUM KOLONU *@
+                <td>
+                    @if (item.Onay)
+                    {
+                        <span class="badge bg-success">Onaylandı</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Onay Bekliyor</span>
+                    }
+                </td>
+
+                @* 🔴 ADMİN İŞLEMLERİ *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        @if (!item.Onay)
+                        {
+                            @* Onaylı değilse butonu göster *@
+                            <a asp-action="Onayla" asp-route-id="@item.Id" class="btn btn-sm btn-success">✅ Onayla</a>
+                        }
+                        else
+                        {
+                            <span class="text-success">✔ Tamam</span>
+                        }
+
+                        @* Silme butonu (İsteğe bağlı, zaten Delete action'ımız var) *@
+                        @* <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Sil</a> *@
+                    </td>
+                }
             </tr>
         }
     </tbody>
 </table>
-

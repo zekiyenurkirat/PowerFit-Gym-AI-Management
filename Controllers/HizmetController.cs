@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
@@ -65,33 +66,75 @@ public class HizmetController : Controller
         return View(hizmet);
     }
 
-    // SİLME İŞLEMİ (POST)
+    // HizmetController.cs dosyasının içindeki DeleteConfirmed metodunu bul ve bununla değiştir:
+
+    // POST: Hizmet/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public IActionResult DeleteConfirmed(int id)
+    public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var hizmet = _context.Hizmetler.Find(id);
+        // Silinecek hizmeti ve ona bağlı randevuları getiriyoruz
+        var hizmet = await _context.Hizmetler
+            .Include(h => h.Randevular) // 👈 Önemli: Randevuları da dahil et
+            .FirstOrDefaultAsync(x => x.Id == id);
+
         if (hizmet != null)
         {
-            // 1. Bu hizmete ait RANDEVULARI temizle
-            var randevular = _context.Randevular.Where(r => r.HizmetId == id).ToList();
-            if (randevular.Count > 0)
+            // 1. Önce bu hizmete ait randevuları siliyoruz
+            if (hizmet.Randevular != null && hizmet.Randevular.Any())
             {
-                _context.Randevular.RemoveRange(randevular);
+                _context.Randevular.RemoveRange(hizmet.Randevular);
             }
 
-            // 2. Bu hizmetin Antrenörlerle olan bağını (AntrenorHizmet tablosunu) temizle
-            var baglantilar = _context.AntrenorHizmetler.Where(ah => ah.HizmetId == id).ToList();
-            if (baglantilar.Count > 0)
-            {
-                _context.AntrenorHizmetler.RemoveRange(baglantilar);
-            }
-
-            // 3. Hizmeti sil
+            // 2. Sonra hizmetin kendisini siliyoruz
             _context.Hizmetler.Remove(hizmet);
-            _context.SaveChanges();
+
+            await _context.SaveChangesAsync();
         }
 
         return RedirectToAction(nameof(Index));
     }
+
+    // GÜNCELLEME SAYFASI (GET)
+    public IActionResult Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var hizmet = _context.Hizmetler.Find(id);
+        if (hizmet == null) return NotFound();
+
+        ViewBag.SporSalonlari = _context.SporSalonları.ToList();
+        return View(hizmet);
+    }
+
+    // GÜNCELLEME İŞLEMİ (POST)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Edit(int id, Hizmet hizmet)
+    {
+        if (id != hizmet.Id) return NotFound();
+
+        ModelState.Remove("SporSalonu");
+        ModelState.Remove("AntrenorHizmetler");
+        ModelState.Remove("Randevular");
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(hizmet);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Hizmetler.Any(e => e.Id == hizmet.Id)) return NotFound();
+                else throw;
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.SporSalonlari = _context.SporSalonları.ToList();
+        return View(hizmet);
+    }
+
 }
