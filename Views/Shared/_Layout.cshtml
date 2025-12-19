@@ -1,19 +1,77 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Spor Salonu</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - PowerFit Gym</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WebApplication1.styles.css" asp-append-version="true" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f6f9; /* Hafif gri arka plan */
+        }
+
+        /* Navbar Tasarımı */
+        .navbar {
+            background: linear-gradient(90deg, #111111 0%, #2a2a2a 100%); /* Koyu degrade */
+            padding: 1rem 0;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            color: #ff8c00 !important; /* Turuncu Logo */
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+        .nav-link:hover {
+            color: #ff8c00 !important;
+            transform: translateY(-2px);
+        }
+        .nav-link.btn-primary {
+            background-color: #ff8c00;
+            border: none;
+            border-radius: 50px; /* Yuvarlak buton */
+            padding: 8px 20px;
+        }
+        .nav-link.btn-primary:hover {
+            background-color: #e07b00;
+            color: white !important;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        /* Footer Tasarımı */
+        footer {
+            background-color: #111;
+            color: #aaa;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+        footer a {
+            color: #ff8c00;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Spor Salonu</a>
+        <nav class="navbar navbar-expand-lg navbar-dark box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fa fa-dumbbell"></i> PowerFit Gym
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,59 +81,65 @@
                     @* --- SOL TARAFTAKİ MENÜLER --- *@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
                         </li>
 
                         @* 🔴 ADMİN GİRİŞİ YAPILMIŞSA GÖRÜNECEKLER *@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Antrenor" asp-action="Index">Antrenör Yönetimi</a>
+                                <a class="nav-link" asp-controller="Antrenor" asp-action="Index">Antrenör Yönetimi</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Hizmet" asp-action="Index">Hizmet Yönetimi</a>
+                                <a class="nav-link" asp-controller="Hizmet" asp-action="Index">Hizmet Yönetimi</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-danger fw-bold" asp-controller="Randevu" asp-action="Index">Tüm Randevular</a>
+                                <a class="nav-link text-warning fw-bold" asp-controller="Randevu" asp-action="Index">Tüm Randevular</a>
                             </li>
                         }
-                        @* 🔵 NORMAL ÜYE (SULE) GİRİŞİ YAPILMIŞSA GÖRÜNECEKLER *@
+                        @* 🔵 NORMAL ÜYE GİRİŞİ YAPILMIŞSA GÖRÜNECEKLER *@
                         else if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Antrenor" asp-action="Index">Antrenörlerimiz</a>
+                                <a class="nav-link" asp-controller="Antrenor" asp-action="Index">Antrenörlerimiz</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Hizmet" asp-action="Index">Hizmetlerimiz</a>
+                                <a class="nav-link" asp-controller="Hizmet" asp-action="Index">Hizmetlerimiz</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link btn btn-primary text-white ms-2" asp-controller="Randevu" asp-action="Create">Randevu Al</a>
+                                <a class="nav-link" asp-controller="Randevu" asp-action="Index">Randevularım</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Randevu" asp-action="Index">Randevularım</a>
+                                <a class="nav-link" asp-area="" asp-controller="YapayZeka" asp-action="Index">
+                                    <i class="fa fa-robot"></i> Yapay Zeka
+                                </a>
+                            </li>
+                            <li class="nav-item ms-2">
+                                <a class="nav-link btn btn-primary text-white" asp-controller="Randevu" asp-action="Create">Randevu Al</a>
                             </li>
                         }
                     </ul>
 
                     @* --- SAĞ TARAFTAKİ LOGİN/REGISTER KISMI --- *@
-                    @* 👇 İşte burası eksikti, bunu ekledik! *@
                     <partial name="_LoginPartial" />
 
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
+
+    <div class="container-fluid p-0">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer class="border-top footer text-center">
         <div class="container">
-            &copy; 2025 - Spor Salonu - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2025 - PowerFit Gym - <a asp-area="" asp-controller="Home" asp-action="Privacy">Gizlilik Politikası</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

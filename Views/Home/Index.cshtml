@@ -1,8 +1,130 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Anasayfa";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section text-center text-white d-flex align-items-center justify-content-center">
+    <div class="hero-overlay"></div> <div class="hero-content container position-relative">
+        <h1 class="display-3 fw-bold mb-3 animate-up">Sınırlarını Zorla!</h1>
+        <p class="lead mb-4 animate-up-delay">Hayalindeki vücuda ulaşmak için en iyi ekipmanlar ve uzman antrenörler burada.</p>
+
+        @if (User.Identity?.IsAuthenticated == false)
+        {
+            <a class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-bold animate-up-delay-2" href="/Identity/Account/Register">Aramıza Katıl</a>
+        }
+        else
+        {
+            <a class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-bold animate-up-delay-2" asp-controller="Randevu" asp-action="Create">Hemen Başla</a>
+        }
+    </div>
 </div>
+
+<div class="container mt-5 mb-5">
+    <div class="row text-center">
+        <div class="col-12 mb-4">
+            <h2 class="fw-bold text-dark">Neden Biz?</h2>
+            <p class="text-muted">Sadece bir spor salonu değil, bir yaşam tarzı.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm service-card">
+                <div class="card-body text-center p-4">
+                    <div class="icon-box mb-3">
+                        <i class="fa fa-dumbbell fa-3x text-warning"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">Modern Ekipmanlar</h4>
+                    <p class="card-text text-muted">Son teknoloji kardiyo ve ağırlık makineleri ile antrenmanını zirveye taşı.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm service-card">
+                <div class="card-body text-center p-4">
+                    <div class="icon-box mb-3">
+                        <i class="fa fa-user-ninja fa-3x text-warning"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">Uzman Antrenörler</h4>
+                    <p class="card-text text-muted">Alanında uzman eğitmenlerimizle sana özel programlar hazırla.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm service-card">
+                <div class="card-body text-center p-4">
+                    <div class="icon-box mb-3">
+                        <i class="fa fa-brain fa-3x text-warning"></i>
+                    </div>
+                    <h4 class="card-title fw-bold">Yapay Zeka Desteği</h4>
+                    <p class="card-text text-muted">Sisteme verilerini gir, yapay zeka sana en uygun programı çıkarsın.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Hero Alanı Arka Plan Resmi */
+    .hero-section {
+        /* Unsplash'tan spor salonu resmi */
+        background-image: url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=1470&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        height: 80vh; /* Ekranın %80'ini kapla */
+        position: relative;
+        margin-top: -1.5rem; /* Navbar boşluğunu kapatmak için */
+    }
+
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Karanlık filtre */
+    }
+
+    .animate-up {
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .animate-up-delay {
+        animation: fadeInUp 1s ease-out 0.3s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+
+    .animate-up-delay-2 {
+        animation: fadeInUp 1s ease-out 0.6s;
+        opacity: 0;
+        animation-fill-mode: forwards;
+    }
+
+    /* İŞTE DÜZELTME BURADA: @@keyframes yaptık */
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Kart Animasyonları */
+    .service-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 15px;
+    }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+    .icon-box i {
+        color: #ff8c00 !important;
+    }
+</style>

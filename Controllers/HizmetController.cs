@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class HizmetController : Controller
 {
     private readonly UygulamaContext _context;
@@ -22,6 +22,7 @@ public class HizmetController : Controller
     }
 
     // EKLEME SAYFASI (GET)
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         ViewBag.SporSalonlari = _context.SporSalonları.ToList();
@@ -50,6 +51,7 @@ public class HizmetController : Controller
     }
 
     // SİLME ONAY SAYFASI (GET)
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(int? id)
     {
         if (id == null)
@@ -96,6 +98,7 @@ public class HizmetController : Controller
     }
 
     // GÜNCELLEME SAYFASI (GET)
+    [Authorize(Roles = "Admin")]
     public IActionResult Edit(int? id)
     {
         if (id == null) return NotFound();

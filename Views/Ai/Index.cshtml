@@ -1,0 +1,29 @@
+﻿@model AiOneriRequest
+
+<h2>Yapay Zeka Egzersiz Önerisi</h2>
+
+<form method="post">
+    <label>Boy (cm)</label>
+    <input asp-for="Boy" />
+
+    <label>Kilo (kg)</label>
+    <input asp-for="Kilo" />
+
+    <label>Hedef</label>
+    <select asp-for="Hedef">
+        <option>Kilo Vermek</option>
+        <option>Kas Kazanmak</option>
+        <option>Formda Kalmak</option>
+    </select>
+
+    <label>Haftada Kaç Gün Spor?</label>
+    <input asp-for="HaftalikGun" />
+
+    <button type="submit">Yapay Zeka Öner</button>
+</form>
+
+@if (ViewBag.Sonuc != null)
+{
+    <hr />
+    <pre>@ViewBag.Sonuc</pre>
+}

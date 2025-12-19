@@ -1,0 +1,74 @@
+﻿@model WebApplication1.Models.YapayZekaViewModel
+
+@{
+    ViewData["Title"] = "AI Antrenör";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Bilgilerini Gir</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="OneriAl" method="post">
+                        <div class="mb-3">
+                            <label>Yaşınız</label>
+                            <input asp-for="Yas" class="form-control" type="number" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Kilonuz (kg)</label>
+                            <input asp-for="Kilo" class="form-control" type="number" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Boyunuz (cm)</label>
+                            <input asp-for="Boy" class="form-control" type="number" required />
+                        </div>
+                        <div class="mb-3">
+                            <label>Cinsiyet</label>
+                            <select asp-for="Cinsiyet" class="form-control">
+                                <option value="Erkek">Erkek</option>
+                                <option value="Kadın">Kadın</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Hedefiniz</label>
+                            <select asp-for="Hedef" class="form-control">
+                                <option value="Kilo Vermek">Kilo Vermek</option>
+                                <option value="Kas Yapmak">Kas Yapmak</option>
+                                <option value="Fit Olmak">Fit Olmak</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">
+                            Yapay Zekaya Sor
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            @if (!string.IsNullOrEmpty(Model.OneriSonuc))
+            {
+                <div class="alert alert-success">
+                    <h4><i class="fa fa-robot"></i> Yapay Zeka Önerisi:</h4>
+                    <hr />
+                    @Html.Raw(Model.OneriSonuc)
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.OlusanResimUrl))
+            {
+                <div class="card mt-3">
+                    <div class="card-header">
+                        Hedeflenen Tahmini Görünüm
+                    </div>
+                    <div class="card-body text-center">
+                        <img src="@Model.OlusanResimUrl" class="img-fluid rounded" style="max-height: 400px;" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

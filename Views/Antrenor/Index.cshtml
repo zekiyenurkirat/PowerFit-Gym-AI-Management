@@ -1,40 +1,46 @@
 ﻿@model IEnumerable<WebApplication1.Models.Antrenor>
 
 @{
-    ViewData["Title"] = "Antrenör Listesi";
+    ViewData["Title"] = "Antrenörlerimiz";
 }
 
-<h1>Antrenör Listesi</h1>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="text-warning fw-bold"><i class="fa fa-users"></i> Antrenör Kadrosu</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Yeni Antrenör Ekle</a>
-</p>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fa fa-user-plus"></i> Yeni Antrenör Ekle
+            </a>
+        }
+    </div>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Ad</th>
-            <th>Soyad</th>
-            <th>Uzmanlık Alanı</th>
-            <th>Başlangıç Saati</th>
-            <th>Bitiş Saati</th>
-            <th>İşlemler</th>
-        </tr>
-    </thead>
-    <tbody>
+    <div class="row">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.Ad</td>
-                <td>@item.Soyad</td>
-                <td>@item.UzmanlikAlani</td>
-                <td>@item.BaslangicSaati</td>
-                <td>@item.BitisSaati</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Düzenle</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Sil</a>
-                </td>
-            </tr>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm" style="border-radius: 15px; overflow: hidden;">
+                    <div class="card-header bg-dark text-center py-4">
+                        <i class="fa fa-user-ninja fa-4x text-warning"></i>
+                    </div>
+                    <div class="card-body text-center">
+                        <h4 class="card-title fw-bold">@item.Ad @item.Soyad</h4>
+
+                        <p class="card-text text-muted">@item.UzmanlikAlani</p>
+
+                        <hr />
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="d-flex justify-content-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning text-dark fw-bold">Düzenle</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Sil</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

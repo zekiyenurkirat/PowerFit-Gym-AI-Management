@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 using WebApplication1.Models;
 
-[Authorize(Roles = "Admin")]
+[Authorize]
 public class AntrenorController : Controller
 {
     private readonly UygulamaContext _context;
@@ -19,6 +19,7 @@ public class AntrenorController : Controller
         return View(_context.Antrenorler.ToList());
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         ViewBag.SporSalonlari = _context.SporSalonları.ToList();
@@ -44,6 +45,7 @@ public class AntrenorController : Controller
     }
 
     // 1. AŞAMA: Silme onay sayfasını getiren metod  
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(int? id)
     {
         if (id == null)
@@ -91,6 +93,7 @@ public class AntrenorController : Controller
 
 
     // GÜNCELLEME SAYFASINI AÇAN METOD (GET)
+    [Authorize(Roles = "Admin")]
     public IActionResult Edit(int? id)
     {
         if (id == null)
