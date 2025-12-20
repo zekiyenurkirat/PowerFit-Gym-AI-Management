@@ -1,77 +1,122 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Kayıt Ol";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    body {
+        background-image: url('https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=1470&auto=format&fit=crop');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
+    .auth-card {
+        background-color: rgba(0, 0, 0, 0.85);
+        border-radius: 15px;
+        border: 1px solid #333;
+        box-shadow: 0 0 20px rgba(255, 140, 0, 0.2);
+    }
 
-            <div class="form-group">
-                <label asp-for="Input.Ad"></label>
-                <input asp-for="Input.Ad" class="form-control" />
-                <span asp-validation-for="Input.Ad" class="text-danger"></span>
-            </div>
+    .form-control {
+        background-color: #222;
+        border: 1px solid #444;
+        color: #fff;
+    }
 
-            <div class="form-group">
-                <label asp-for="Input.Soyad"></label>
-                <input asp-for="Input.Soyad" class="form-control" />
-                <span asp-validation-for="Input.Soyad" class="text-danger"></span>
-            </div>
+        .form-control:focus {
+            background-color: #333;
+            border-color: #ff8c00;
+            color: #fff;
+            box-shadow: 0 0 0 0.25rem rgba(255, 140, 0, 0.25);
+        }
 
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+    .form-floating label {
+        color: #aaa;
+    }
+
+    .btn-register {
+        background-color: #ff8c00;
+        border: none;
+        font-weight: bold;
+        color: #000;
+        transition: all 0.3s;
+    }
+
+        .btn-register:hover {
+            background-color: #e07b00;
+            transform: scale(1.02);
+        }
+
+    a {
+        text-decoration: none;
+        color: #ff8c00;
+        transition: color 0.2s;
+    }
+
+        a:hover {
+            color: #fff;
+        }
+</style>
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 80vh; margin-top: 20px; margin-bottom: 20px;">
+    <div class="col-md-6">
+        <div class="card auth-card p-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold text-white">Aramıza Katıl!</h2>
+                    <p class="text-muted">PowerFit ailesinin bir parçası ol ve değişimi başlat.</p>
+                </div>
+
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="Input.Ad" class="form-control" placeholder="Adınız" />
+                                <label asp-for="Input.Ad">Ad</label>
+                                <span asp-validation-for="Input.Ad" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <input asp-for="Input.Soyad" class="form-control" placeholder="Soyadınız" />
+                                <label asp-for="Input.Soyad">Soyad</label>
+                                <span asp-validation-for="Input.Soyad" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                        <label asp-for="Input.Email">E-Posta Adresi</label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.Password">Şifre</label>
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                        <label asp-for="Input.ConfirmPassword">Şifre Tekrar</label>
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-register rounded-pill mt-2">Kayıt Ol</button>
+
+                    <div class="text-center mt-3">
+                        <p class="text-white">
+                            Zaten hesabın var mı? <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="fw-bold">Giriş Yap</a>
                         </p>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
