@@ -6,21 +6,21 @@ namespace WebApplication1.Models
     {
         public int Id { get; set; }
 
-        // 🔗 Üye (otomatik atanıyor)
+        //  Üye (otomatik atanıyor)
         public int UyeId { get; set; }
         public Uye? Uye { get; set; }
 
-        // 🔗 Antrenör
+        //  Antrenör
         
         public int AntrenorId { get; set; }
         public Antrenor? Antrenor { get; set; }
 
-        // 🔗 Hizmet
+        //  Hizmet
         
         public int HizmetId { get; set; }
         public Hizmet? Hizmet { get; set; }
 
-        // 📅 Randevu Tarih-Saat
+        //  Randevu Tarih-Saat
         
         public DateTime TarihSaat { get; set; }
 

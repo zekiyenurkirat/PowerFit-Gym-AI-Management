@@ -18,7 +18,7 @@ public class RandevuController : Controller
         _userManager = userManager;
     }
 
-    // 📄 LİSTELEME
+    //  LİSTELEME
     public async Task<IActionResult> Index()
     {
         IQueryable<Randevu> randevular = _context.Randevular
@@ -36,7 +36,7 @@ public class RandevuController : Controller
         return View(await randevular.ToListAsync());
     }
 
-    // ➕ EKLEME SAYFASI (GET)
+    //  EKLEME SAYFASI (GET)
     public IActionResult Create()
     {
         ViewBag.Antrenorler = _context.Antrenorler.ToList();
@@ -44,7 +44,7 @@ public class RandevuController : Controller
         return View();
     }
 
-    // 💾 KAYDETME İŞLEMİ (POST)
+    //  KAYDETME İŞLEMİ (POST)
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Randevu randevu)
@@ -69,7 +69,7 @@ public class RandevuController : Controller
         // 3. Randevuyu bu üyeye ata
         randevu.UyeId = uye.Id;
 
-        // Model validasyonu (Gelen veriler kurallara uyuyor mu?)
+        // 
         // Not: Navigasyon propertyleri (Uye, Antrenor vb.) null gelebilir, bu yüzden ModelState.Remove yapıyoruz.
         ModelState.Remove("Uye");
         ModelState.Remove("Antrenor");

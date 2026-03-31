@@ -68,27 +68,27 @@ public class HizmetController : Controller
         return View(hizmet);
     }
 
-    // HizmetController.cs dosyasının içindeki DeleteConfirmed metodunu bul ve bununla değiştir:
+    
 
     // POST: Hizmet/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        // Silinecek hizmeti ve ona bağlı randevuları getiriyoruz
+        // Silinecek hizmeti ve ona bağlı randevuları getir
         var hizmet = await _context.Hizmetler
-            .Include(h => h.Randevular) // 👈 Önemli: Randevuları da dahil et
+            .Include(h => h.Randevular) //  Randevuları da dahil et
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (hizmet != null)
         {
-            // 1. Önce bu hizmete ait randevuları siliyoruz
+            // 1. Önce bu hizmete ait randevuları sil
             if (hizmet.Randevular != null && hizmet.Randevular.Any())
             {
                 _context.Randevular.RemoveRange(hizmet.Randevular);
             }
 
-            // 2. Sonra hizmetin kendisini siliyoruz
+            // 2. Sonra hizmetin kendisini sil
             _context.Hizmetler.Remove(hizmet);
 
             await _context.SaveChangesAsync();

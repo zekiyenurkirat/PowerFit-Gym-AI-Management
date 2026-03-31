@@ -32,8 +32,7 @@ namespace WebApplication1.Controllers
                             $"Bana spor salonunda yapabileceğim 3 maddelik kısa bir egzersiz listesi ve 1 günlük örnek diyet listesi hazırla. " +
                             $"Cevabı HTML formatında (ul, li, b etiketleri kullanarak) ver.";
 
-            // 2. MODEL SEÇİMİ (Senin listende çıkan en güncel model: gemini-2.5-flash)
-            // 2.5 yoğun olduğu için 2.0 sürümüne geçtik
+            
             // Listende "gemini-1.5-flash" yok ama "gemini-flash-latest" var. Bunu kullanıyoruz.
             var url = $"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={_apiKey}";
 
@@ -82,7 +81,7 @@ namespace WebApplication1.Controllers
                 model.OneriSonuc = "Bağlantı Hatası: " + ex.Message;
             }
 
-            // 4. RESİM (Temsili)
+            // 4. RESİM 
             if (model.Cinsiyet == "Erkek")
                 model.OlusanResimUrl = "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?auto=format&fit=crop&w=500&q=80";
             else

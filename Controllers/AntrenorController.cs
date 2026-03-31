@@ -30,7 +30,7 @@ public class AntrenorController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(Antrenor antrenor)
     {
-        ModelState.Remove("SporSalonu"); //sorun
+        ModelState.Remove("SporSalonu"); 
         ModelState.Remove("AntrenorHizmetler");
         ModelState.Remove("Randevular");
         if (!ModelState.IsValid)
@@ -62,27 +62,27 @@ public class AntrenorController : Controller
         return View(antrenor);
     }
 
-    // AntrenorController.cs dosyasının içindeki DeleteConfirmed metodunu bul ve bununla değiştir:
+    
 
     // POST: Antrenor/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        // Silinecek antrenörü ve ona bağlı randevuları getiriyoruz
+        // Silinecek antrenörü ve ona bağlı randevuları getir
         var antrenor = await _context.Antrenorler
-            .Include(a => a.Randevular) // 👈 Önemli: Randevuları da dahil et
+            .Include(a => a.Randevular) //  Önemli: Randevuları da dahil et
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (antrenor != null)
         {
-            // 1. Önce bu antrenöre ait gelecekteki randevuları siliyoruz
+            // 1. Önce bu antrenöre ait gelecekteki randevuları sil
             if (antrenor.Randevular != null && antrenor.Randevular.Any())
             {
                 _context.Randevular.RemoveRange(antrenor.Randevular);
             }
 
-            // 2. Sonra antrenörün kendisini siliyoruz
+            // 2. Sonra antrenörün kendisini sil
             _context.Antrenorler.Remove(antrenor);
 
             await _context.SaveChangesAsync();
@@ -107,7 +107,7 @@ public class AntrenorController : Controller
             return NotFound();
         }
 
-        // Dropdown (Açılır kutu) için spor salonlarını tekrar yüklüyoruz
+        // Dropdown (Açılır kutu) için spor salonlarını tekrar yüklüyo
         ViewBag.SporSalonlari = _context.SporSalonları.ToList();
         return View(antrenor);
     }
@@ -122,7 +122,7 @@ public class AntrenorController : Controller
             return NotFound();
         }
 
-        // İlişkisel alan hatalarını yine yoksayıyoruz
+        // İlişkisel alan hatalarını yine yoksayıyor
         ModelState.Remove("SporSalonu");
         ModelState.Remove("AntrenorHizmetler");
         ModelState.Remove("Randevular");

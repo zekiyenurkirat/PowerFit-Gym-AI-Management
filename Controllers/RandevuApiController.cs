@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using WebApplication1.Models;
-using WebApplication1.Data; // ⚠️ Context dosyan buradaysa bu namespace gerekli
+using WebApplication1.Data; // Context dosyan buradaysa bu namespace gerekli
 
 namespace WebApplication1.Controllers
 {
@@ -34,7 +34,7 @@ namespace WebApplication1.Controllers
             if (uye == null)
                 return Unauthorized("Üye profili bulunamadı.");
 
-            // 🔍 LINQ FİLTRELEME: Sadece bu üyeye ait randevuları getir
+            //  LINQ FİLTRELEME: Sadece bu üyeye ait randevuları getir
             var randevular = await _context.Randevular
                 .Where(r => r.UyeId == uye.Id)
                 .Include(r => r.Antrenor)
@@ -53,7 +53,7 @@ namespace WebApplication1.Controllers
             return Ok(randevular);
         }
 
-        // 🔹 ADMIN → TÜM RANDEVULAR
+        //  ADMIN -> TÜM RANDEVULAR
         // URL: https://localhost:port/api/RandevuApi/admin-tum-randevular
         [HttpGet("admin-tum-randevular")]
         [Authorize(Roles = "Admin")] // Sadece Admin girebilir

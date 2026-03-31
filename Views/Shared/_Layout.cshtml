@@ -114,27 +114,29 @@
                                     <i class="fa fa-robot"></i> Yapay Zeka
                                 </a>
                             </li>
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <li class="nav-item ms-2">
-                                    @if (User.IsInRole("Admin"))
-                                    {
-                                        <a class="nav-link btn btn-outline-info text-white"
-                                           href="/api/RandevuApi/admin-tum-randevular" target="_blank">
-                                            <i class="fa fa-database"></i> API (Tüm Randevular)
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a class="nav-link btn btn-outline-info text-white"
-                                           href="/api/RandevuApi/uye-randevularim" target="_blank">
-                                            <i class="fa fa-database"></i> API (Verilerim)
-                                        </a>
-                                    }
-                                </li>
-                            }
                             <li class="nav-item ms-2">
                                 <a class="nav-link btn btn-primary text-white" asp-controller="Randevu" asp-action="Create">Randevu Al</a>
+                            </li>
+                        }
+
+                        @* ⚫ HERKES İÇİN API LİNKİ (Burası artık if/else dışına çıktı!) *@
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item ms-2">
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="nav-link btn btn-outline-info text-white"
+                                       href="/api/RandevuApi/admin-tum-randevular" target="_blank">
+                                        <i class="fa fa-database"></i> API (Verilerim)
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="nav-link btn btn-outline-info text-white"
+                                       href="/api/RandevuApi/uye-randevularim" target="_blank">
+                                        <i class="fa fa-database"></i> API (Verilerim)
+                                    </a>
+                                }
                             </li>
                         }
                     </ul>

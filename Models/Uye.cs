@@ -8,10 +8,10 @@
 
         public string? Soyad { get; set; }   // opsiyonel
 
-        public string Email { get; set; } = null!; // ✅ zorunlu
+        public string Email { get; set; } = null!; //  zorunlu
 
         public ICollection<Randevu> Randevular { get; set; } = new List<Randevu>(); // ✅
 
-        public string IdentityUserId { get; set; } = null!; // ✅
+        public string IdentityUserId { get; set; } = null!; 
     }
 }

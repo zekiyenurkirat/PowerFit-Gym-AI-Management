@@ -14,7 +14,7 @@ public class AiController : Controller
         if (!ModelState.IsValid)
             return View(model);
 
-        // 🔮 Yapay zeka simülasyonu (OpenAI mantığı)
+        
         string sonuc = $@"
 Boyunuz: {model.Boy} cm
 Kilonuz: {model.Kilo} kg
